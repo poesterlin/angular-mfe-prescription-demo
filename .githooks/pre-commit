@@ -18,14 +18,8 @@ if ! command -v fallow >/dev/null 2>&1; then
   exit 0
 fi
 
-UPSTREAM="$(git rev-parse --abbrev-ref --symbolic-full-name '@{upstream}' 2>/dev/null || true)"
-if [ -n "$UPSTREAM" ]; then
-  # Diff against the merge-base with the upstream so feature branches forked off
-  # a non-default integration branch (next-release / hotfix / LTS) compare
-  # against the right base, not against their own remote tracking branch.
-  BASE="$(git merge-base "$UPSTREAM" HEAD 2>/dev/null || echo "$UPSTREAM")"
-else
-  BASE="main"
-fi
+# Judge only what this commit changes: compare the working tree against HEAD.
+# Findings in earlier local commits were already gated when they were made.
+BASE="HEAD"
 
 fallow audit --base "$BASE" --quiet --gate-marker pre-commit
