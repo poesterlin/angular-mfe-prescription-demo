@@ -12,14 +12,17 @@
     "**/federation.config.{js,mjs,cjs}", // read by the native federation builder
     "**/src/app/**/*.routes.ts",      // modules a remote exposes ('./routes'); the shell loads them by name
     "e2e/**/*.ts",                    // Playwright config, fixtures and suites
-    "**/src/styles.css"               // global stylesheets, referenced only from angular.json
+    "**/src/styles.css",              // global stylesheets, referenced only from angular.json
+    "deploy/server.ts",               // the Bun server the container runs
+    "deploy/*.test.ts"                // bun test
   ],
 
   // Generated output, not source.
   "ignorePatterns": [
     "**/.angular/**",
     "**/playwright-report/**",
-    "**/test-results/**"
+    "**/test-results/**",
+    "deploy/experiments/**"           // one-off measurement scripts and a patch, run by hand
   ],
 
   // Empty on purpose: the Shell loads Remotes by URL from remotes.json, never by a

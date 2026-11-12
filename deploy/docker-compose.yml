@@ -1,0 +1,47 @@
+# Two builds of the same hosting setup, behind Traefik, one hostname each:
+#   baseline  plain static hosting
+#   edge      same, plus preload hints in the HTML
+#
+#   docker compose -f deploy/docker-compose.yml up -d --build
+#
+# Shell and Remote share one origin per variant (the Remote under /remotes/prescription/).
+# LAN/tailnet only: nothing here adds a hostname to the Cloudflare tunnel.
+name: mfe-demo
+
+x-app: &app
+  build: { context: .., dockerfile: deploy/Dockerfile }
+  image: mfe-demo:local
+  init: true
+  restart: unless-stopped
+  read_only: true
+  cap_drop: [ALL]
+  security_opt: ["no-new-privileges:true"]
+  ports: []
+  expose: ["4200"]
+  networks: [traefik_web]
+  logging: { driver: json-file, options: { max-size: "10m", max-file: "3" } }
+
+services:
+  baseline:
+    <<: *app
+    environment:
+      EDGE_HINTS: "0"
+      PUBLIC_URL: "https://${BASELINE_HOST:?set BASELINE_HOST in deploy/.env}"
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.mfe-baseline.rule=Host(`${BASELINE_HOST:?set BASELINE_HOST in deploy/.env}`)
+      - traefik.http.services.mfe-baseline.loadbalancer.server.port=4200
+
+  edge:
+    <<: *app
+    environment:
+      EDGE_HINTS: "1"
+      PUBLIC_URL: "https://${EDGE_HOST:?set EDGE_HOST in deploy/.env}"
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.mfe-edge.rule=Host(`${EDGE_HOST:?set EDGE_HOST in deploy/.env}`)
+      - traefik.http.services.mfe-edge.loadbalancer.server.port=4200
+
+networks:
+  traefik_web:
+    external: true

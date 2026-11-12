@@ -41,3 +41,6 @@ Thumbs.db
 # Playwright
 e2e/test-results/
 e2e/playwright-report/
+
+# Local deployment settings (hostnames)
+deploy/.env

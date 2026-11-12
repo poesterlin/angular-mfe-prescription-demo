@@ -1,0 +1,179 @@
+diff --git a/prescription/angular.json b/prescription/angular.json
+index b178839..cc86e2f 100644
+--- a/prescription/angular.json
++++ b/prescription/angular.json
+@@ -18,7 +18,8 @@
+           "builder": "@angular-architects/native-federation:build",
+           "options": {
+             "cacheExternalArtifacts": true,
+-            "tsConfig": "tsconfig.federation.json"
++            "tsConfig": "tsconfig.federation.json",
++            "esmsInitOptions": { "shimMode": false }
+           },
+           "configurations": {
+             "production": {
+@@ -38,6 +39,7 @@
+             "tsConfig": "tsconfig.federation.json",
+             "rebuildDelay": 500,
+             "cacheExternalArtifacts": true,
++            "esmsInitOptions": { "shimMode": false },
+             "dev": true,
+             "devServer": true,
+             "port": 0
+@@ -60,8 +62,7 @@
+                 "input": "public"
+               }
+             ],
+-            "styles": ["src/styles.css"],
+-            "polyfills": ["es-module-shims"]
++            "styles": ["src/styles.css"]
+           },
+           "configurations": {
+             "production": {
+diff --git a/prescription/package-lock.json b/prescription/package-lock.json
+index a8095a0..fda6fe6 100644
+--- a/prescription/package-lock.json
++++ b/prescription/package-lock.json
+@@ -8,13 +8,12 @@
+       "name": "prescription",
+       "version": "0.0.0",
+       "dependencies": {
+-        "@angular-architects/native-federation": "^22.2.5",
++        "@angular-architects/native-federation": "~22.2.5",
+         "@angular/common": "~22.2.0",
+         "@angular/compiler": "~22.2.0",
+         "@angular/core": "~22.2.0",
+         "@angular/platform-browser": "~22.2.0",
+         "@angular/router": "~22.2.0",
+-        "es-module-shims": "^2.8.0",
+         "rxjs": "~7.8.0",
+         "tslib": "^2.3.0"
+       },
+diff --git a/prescription/package.json b/prescription/package.json
+index 6abe8ec..52e0d46 100644
+--- a/prescription/package.json
++++ b/prescription/package.json
+@@ -18,16 +18,15 @@
+     "@angular/platform-browser": "~22.2.0",
+     "@angular/router": "~22.2.0",
+     "rxjs": "~7.8.0",
+-    "tslib": "^2.3.0",
+-    "es-module-shims": "^2.8.0"
++    "tslib": "^2.3.0"
+   },
+   "devDependencies": {
+     "@angular/build": "~22.2.6",
+     "@angular/cli": "~22.2.6",
+     "@angular/compiler-cli": "~22.2.0",
++    "@softarc/native-federation-orchestrator": "^4.10.0",
+     "jsdom": "^30.0.0",
+     "typescript": "~6.0.2",
+-    "vitest": "^5.0.0",
+-    "@softarc/native-federation-orchestrator": "^4.10.0"
++    "vitest": "^5.0.0"
+   }
+ }
+diff --git a/prescription/src/main.ts b/prescription/src/main.ts
+index 1d0e77d..e437391 100644
+--- a/prescription/src/main.ts
++++ b/prescription/src/main.ts
+@@ -4,6 +4,7 @@ initFederation(
+   {},
+   {
+     hostRemoteEntry: { url: './remoteEntry.json' },
++    shimMode: false,
+   },
+ )
+   .catch((err) => console.error(err))
+diff --git a/shell/angular.json b/shell/angular.json
+index b4e9c15..4a769b8 100644
+--- a/shell/angular.json
++++ b/shell/angular.json
+@@ -18,7 +18,8 @@
+           "builder": "@angular-architects/native-federation:build",
+           "options": {
+             "cacheExternalArtifacts": true,
+-            "tsConfig": "tsconfig.federation.json"
++            "tsConfig": "tsconfig.federation.json",
++            "esmsInitOptions": { "shimMode": false }
+           },
+           "configurations": {
+             "production": {
+@@ -38,6 +39,7 @@
+             "tsConfig": "tsconfig.federation.json",
+             "rebuildDelay": 500,
+             "cacheExternalArtifacts": true,
++            "esmsInitOptions": { "shimMode": false },
+             "dev": true,
+             "devServer": true,
+             "port": 0
+@@ -60,8 +62,7 @@
+                 "input": "public"
+               }
+             ],
+-            "styles": ["src/styles.css"],
+-            "polyfills": ["es-module-shims"]
++            "styles": ["src/styles.css"]
+           },
+           "configurations": {
+             "production": {
+diff --git a/shell/package-lock.json b/shell/package-lock.json
+index 7f4e93f..72c6079 100644
+--- a/shell/package-lock.json
++++ b/shell/package-lock.json
+@@ -8,13 +8,12 @@
+       "name": "shell",
+       "version": "0.0.0",
+       "dependencies": {
+-        "@angular-architects/native-federation": "^22.2.5",
++        "@angular-architects/native-federation": "~22.2.5",
+         "@angular/common": "~22.2.0",
+         "@angular/compiler": "~22.2.0",
+         "@angular/core": "~22.2.0",
+         "@angular/platform-browser": "~22.2.0",
+         "@angular/router": "~22.2.0",
+-        "es-module-shims": "^2.8.0",
+         "rxjs": "~7.8.0",
+         "tslib": "^2.3.0"
+       },
+diff --git a/shell/package.json b/shell/package.json
+index fa44c01..8ec53b3 100644
+--- a/shell/package.json
++++ b/shell/package.json
+@@ -18,16 +18,15 @@
+     "@angular/platform-browser": "~22.2.0",
+     "@angular/router": "~22.2.0",
+     "rxjs": "~7.8.0",
+-    "tslib": "^2.3.0",
+-    "es-module-shims": "^2.8.0"
++    "tslib": "^2.3.0"
+   },
+   "devDependencies": {
+     "@angular/build": "~22.2.6",
+     "@angular/cli": "~22.2.6",
+     "@angular/compiler-cli": "~22.2.0",
++    "@softarc/native-federation-orchestrator": "^4.10.0",
+     "jsdom": "^30.0.0",
+     "typescript": "~6.0.2",
+-    "vitest": "^5.0.0",
+-    "@softarc/native-federation-orchestrator": "^4.10.0"
++    "vitest": "^5.0.0"
+   }
+ }
+diff --git a/shell/src/main.ts b/shell/src/main.ts
+index d962a45..5a80244 100644
+--- a/shell/src/main.ts
++++ b/shell/src/main.ts
+@@ -16,7 +16,11 @@ async function start(): Promise<void> {
+   const remotes = parseManifest(await readManifest());
+   // Remotes are registered lazily on first navigation, so one broken Remote only
+   // affects its own route.
+-  const federation = await initFederation({}, { hostRemoteEntry: { url: './remoteEntry.json' } });
++  const federation = await initFederation(
++    {},
++    // Native import maps: no es-module-shims. The build option esmsInitOptions must match.
++    { hostRemoteEntry: { url: './remoteEntry.json' }, shimMode: false },
++  );
+   const { bootstrap } = await import('./bootstrap');
+   await bootstrap(remotes, federation);
+ }
