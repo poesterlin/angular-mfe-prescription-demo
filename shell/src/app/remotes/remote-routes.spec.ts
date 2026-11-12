@@ -30,6 +30,6 @@ describe('buildRemoteRoutes', () => {
 
     const [fallback] = await loadChildren(route);
     expect(fallback.path).toBe('**');
-    expect(fallback.data).toEqual({ label: 'Prescriptions' });
+    expect(fallback.title).toBe('Unavailable');
   });
 });

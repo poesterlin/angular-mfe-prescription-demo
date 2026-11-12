@@ -5,12 +5,11 @@ import type { RemoteDefinition } from './remote-definition';
 export type RemoteLoader = (remote: RemoteDefinition) => Promise<Routes>;
 
 /** Shown in place of a Remote that cannot be loaded (AC-E1). */
-function unavailableRoutes(label: string): Routes {
+function unavailableRoutes(): Routes {
   return [
     {
       path: '**',
-      title: `${label} unavailable`,
-      data: { label },
+      title: 'Unavailable',
       loadComponent: () => import('./remote-unavailable').then((m) => m.RemoteUnavailable),
     },
   ];
@@ -23,7 +22,7 @@ export function buildRemoteRoutes(remotes: RemoteDefinition[], load: RemoteLoade
     loadChildren: () =>
       load(remote).catch((error: unknown) => {
         console.error(`Remote "${remote.name}" could not be loaded.`, error);
-        return unavailableRoutes(remote.label);
+        return unavailableRoutes();
       }),
   }));
 }

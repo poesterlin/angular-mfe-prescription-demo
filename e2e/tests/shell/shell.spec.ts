@@ -109,7 +109,7 @@ test('AC-E1 an unreachable Remote shows "unavailable" and the Shell keeps workin
 }) => {
   await page.route(`${REMOTE_URL}/remoteEntry.json`, (route) => route.abort());
   await page.goto('/prescriptions');
-  await expect(page.getByRole('alert')).toHaveText('Prescriptions is currently unavailable');
+  await expect(page.getByRole('alert')).toHaveText('This Component is currently unavailable');
   await expect(nav(page)).toBeVisible();
   await nav(page).getByRole('link', { name: 'Home' }).click();
   await expect(page.getByRole('heading', { name: 'Welcome' })).toBeVisible();

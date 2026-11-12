@@ -84,7 +84,7 @@ it gets back.
 
 | ID | Requirement | Source | Verified by |
 | --- | --- | --- | --- |
-| AC-E1 | If a Remote cannot be loaded (entry file unreachable or broken), its route shows the alert "Prescriptions is currently unavailable" (using the manifest label). The Shell's header, navigation and Welcome page keep working. | `[assumption]` | e2e |
+| AC-E1 | If a Remote cannot be loaded (entry file unreachable or broken), its route shows the alert "This Component is currently unavailable". The Shell's header, navigation and Welcome page keep working. | `[assumption]` | e2e |
 | AC-E2 | If a page throws while rendering, the Shell's `@boundary` around the outlet shows the alert "This page stopped working" with a "Try again" button; the navigation stays usable. `@boundary` is in developer preview in Angular 22.2, not stable. | `[assumption]` | untested (C-Q1 exception) |
 | AC-E3 | If the `PrescriptionApi` fails, the Remote shows the alert "Prescriptions could not be loaded" with a "Retry" button that repeats the request without a reload. | `[assumption]` | untested (C-Q1 exception) |
 

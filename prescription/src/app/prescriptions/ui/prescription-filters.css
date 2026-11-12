@@ -1,0 +1,30 @@
+/* Each component sets what the host page's reset would otherwise change (AC-I3). */
+:host,
+:host *,
+:host *::before,
+:host *::after {
+  box-sizing: border-box;
+}
+
+.rx-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.rx-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.rx-error {
+  min-height: 1.5em;
+  color: #b00020;
+}
+
+.rx-reset {
+  align-self: center;
+}

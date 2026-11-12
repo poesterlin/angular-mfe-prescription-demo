@@ -83,7 +83,7 @@ for a Remote not registered at init):
 loadChildren: () => fed.initRemoteEntry(remoteEntry, name)
   .then(f => f.loadRemoteModule(name, exposedModule))
   .then(m => m.default)
-  .catch(() => unavailableRoutes(label))   // AC-E1
+  .catch(() => unavailableRoutes())   // AC-E1
 ```
 
 Lazy registration keeps startup to one fetch (the manifest) and puts each Remote's

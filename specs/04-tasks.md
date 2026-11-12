@@ -42,7 +42,7 @@ It must print nothing.
 - [x] 2.1 `ng add @angular-architects/native-federation@22.2.5 --type host --port 4200` in `shell/`. Fix the range to `~22.2.5`; add `'tslib'` to `skip`. (C-T3, C-A7)
 - [x] 2.2 `remotes/remote-definition.ts`: `RemoteDefinition` and `parseManifest` (skip and log invalid entries; non-list → `[]`). No Angular imports. Vitest spec. (AC-M1, AC-M2)
 - [x] 2.3 `main.ts`: fetch `remotes.json` (failure → `[]`), parse, `initFederation({})`, `import('./bootstrap')`. `bootstrap.ts` exports `bootstrap(remotes, federation)`. (AC-M2)
-- [x] 2.4 `remotes/remote-routes.ts` and `remote-unavailable.ts`: one lazy route per definition via `initRemoteEntry` + `loadRemoteModule`, `.then(m => m.default)`, fallback routes showing "<label> is currently unavailable". Vitest spec for the route building. (AC-S4, AC-E1)
+- [x] 2.4 `remotes/remote-routes.ts` and `remote-unavailable.ts`: one lazy route per definition via `initRemoteEntry` + `loadRemoteModule`, `.then(m => m.default)`, fallback routes showing "This Component is currently unavailable". Vitest spec for the route building. (AC-S4, AC-E1)
 - [x] 2.5 `public/remotes.json` with the `prescription` entry. (AC-S3)
 - [x] 2.6 Layout in `app.html`/`app.css`: header with the app name, `nav` labelled "Main navigation" with "Home" and one link per definition; `@boundary` around the outlet kept. `shell-` classes. (AC-S1, AC-S3, AC-E2, C-S4)
 - [x] 2.7 `welcome/welcome.ts` with heading "Welcome"; routes: `''` → Welcome, remote routes, `'**'` → `''`. (AC-S2, AC-S5)
@@ -56,27 +56,27 @@ It must print nothing.
 
 Model and data
 
-- [ ] 3.1 `model/`: `Prescription`, `PrescriptionQuery`, `PrescriptionPage`, defaults (page 1, page size 20, sizes 10/20/50). (AC-D1, AC-D2)
-- [ ] 3.2 `data-access/prescription-seed.ts`: mulberry32 with a fixed seed; 1,000 Prescriptions, ~200 Insurants, ~30 Medications, dates in 2024–2025, Insurant IDs `[A-Z]\d{9}`. (AC-D2, AC-D3)
-- [ ] 3.3 `data-access/prescription-api.ts` (abstract) and `mock-prescription-api.ts`: Search, Filters, order (date desc, then id), paging, clamping a page past the end; returns `of(page)`. Vitest spec. (AC-D1, AC-D4, AC-F3)
-- [ ] 3.4 `data-access/query-params.ts`: `parseQuery` (defaults for invalid values, `to` before `from` ignored) and `toQueryParams` (non-defaults only). Vitest spec. (AC-U1, AC-U5)
-- [ ] 3.5 `prescription.routes.ts`: provide `{ provide: PrescriptionApi, useClass: MockPrescriptionApi }` at route level. (C-A6, C-A10)
+- [x] 3.1 `model/`: `Prescription`, `PrescriptionQuery`, `PrescriptionPage`, defaults (page 1, page size 20, sizes 10/20/50). (AC-D1, AC-D2)
+- [x] 3.2 `data-access/prescription-seed.ts`: mulberry32 with a fixed seed; 1,000 Prescriptions, ~200 Insurants, ~30 Medications, dates in 2024–2025, Insurant IDs `[A-Z]\d{9}`. (AC-D2, AC-D3)
+- [x] 3.3 `data-access/prescription-api.ts` (abstract) and `mock-prescription-api.ts`: Search, Filters, order (date desc, then id), paging, clamping a page past the end; returns `of(page)`. Vitest spec. (AC-D1, AC-D4, AC-F3)
+- [x] 3.4 `data-access/query-params.ts`: `parseQuery` (defaults for invalid values, `to` before `from` ignored) and `toQueryParams` (non-defaults only). Vitest spec. (AC-U1, AC-U5)
+- [x] 3.5 `prescription.routes.ts`: provide `{ provide: PrescriptionApi, useClass: MockPrescriptionApi }` at route level. (C-A6, C-A10)
 
 View
 
-- [ ] 3.6 `ui/prescription-table.ts`: columns, `dd.MM.yyyy`, result count, empty state. (AC-F1, AC-F2, AC-F4, AC-F5)
-- [ ] 3.7 `ui/prescription-paginator.ts`: range, position, First/Previous/Next/Last with disabled states, "Rows per page" 10/20/50. (AC-Q6, AC-Q7)
-- [ ] 3.8 `ui/prescription-filters.ts`: `linkedSignal` drafts per field; Search debounce 300 ms with `takeUntil(reset)`; Insurant ID and date validation with field messages; an invalid edit emits removal of that filter; Reset clears drafts, cancels the debounce, emits reset. (AC-Q1–Q5, AC-U4)
-- [ ] 3.9 `feature/prescription-page.ts`: `toSignal(queryParamMap)` → `parseQuery` → `rxResource`; relative `navigate` with `replaceUrl` for Search/Filter, push for page, page size and Reset; page 1 on Search/Filter/size change; AC-U6 correction via `effect` only when a value exists; error alert with "Retry" → `reload()`. (AC-Q8, AC-U2, AC-U3, AC-U6, AC-E3, AC-I2)
-- [ ] 3.10 CSS: `rx-` classes; page `:host` sets `font-family`, `font-size`, `line-height`, `color`, `box-sizing` and heading, paragraph and table margins. (C-S1, C-S4, AC-I3)
-- [ ] 3.11 Check by grep that no forbidden syntax exists in either app: `@Input`, `@Output`, `@ViewChild`, `@HostBinding`, `@HostListener`, `EventEmitter`, `BehaviorSubject`, `| async`, `ngModel`, `ViewEncapsulation.None`, `::ng-deep`. (C-K2a, C-S1)
+- [x] 3.6 `ui/prescription-table.ts`: columns, `dd.MM.yyyy`, result count, empty state. (AC-F1, AC-F2, AC-F4, AC-F5)
+- [x] 3.7 `ui/prescription-paginator.ts`: range, position, First/Previous/Next/Last with disabled states, "Rows per page" 10/20/50. (AC-Q6, AC-Q7)
+- [x] 3.8 `ui/prescription-filters.ts`: `linkedSignal` drafts per field; Search debounce 300 ms with `takeUntil(reset)`; Insurant ID and date validation with field messages; an invalid edit emits removal of that filter; Reset clears drafts, cancels the debounce, emits reset. (AC-Q1–Q5, AC-U4)
+- [x] 3.9 `feature/prescription-page.ts`: `toSignal(queryParamMap)` → `parseQuery` → `rxResource`; relative `navigate` with `replaceUrl` for Search/Filter, push for page, page size and Reset; page 1 on Search/Filter/size change; AC-U6 correction via `effect` only when a value exists; error alert with "Retry" → `reload()`. (AC-Q8, AC-U2, AC-U3, AC-U6, AC-E3, AC-I2)
+- [x] 3.10 CSS: `rx-` classes; page `:host` sets `font-family`, `font-size`, `line-height`, `color`, `box-sizing` and heading, paragraph and table margins. (C-S1, C-S4, AC-I3)
+- [x] 3.11 Check by grep that no forbidden syntax exists in either app: `@Input`, `@Output`, `@ViewChild`, `@HostBinding`, `@HostListener`, `EventEmitter`, `BehaviorSubject`, `| async`, `ngModel`, `ViewEncapsulation.None`, `::ng-deep`. (C-K2a, C-S1)
 
 Tests (`tests/remote/`, both projects, unless noted)
 
-- [ ] 3.12 Table and data: AC-F1, AC-F2 (also no timezone shift), AC-F3, AC-F4, AC-F5, AC-D1, AC-D2, AC-D3 (two loads, same rows), AC-D4.
-- [ ] 3.13 Search, Filter, paging: AC-Q1, AC-Q2 (including removal of an applied filter), AC-Q3, AC-Q4 (including removal), AC-Q5 (including Reset during the debounce and with invalid text), AC-Q6, AC-Q7, AC-Q8.
-- [ ] 3.14 URL: AC-U1, AC-U2, AC-U3, AC-U4, AC-U5, AC-U6; AC-I2 (path stays under `mountPath`).
-- [ ] 3.15 `contract.spec.ts`: AC-I3 (fixed property list on heading, header cell, body cell and Search input, standalone vs composed; Shell header and nav with and without the Remote).
+- [x] 3.12 Table and data: AC-F1, AC-F2 (also no timezone shift), AC-F3, AC-F4, AC-F5, AC-D1, AC-D2, AC-D3 (two loads, same rows), AC-D4.
+- [x] 3.13 Search, Filter, paging: AC-Q1, AC-Q2 (including removal of an applied filter), AC-Q3, AC-Q4 (including removal), AC-Q5 (including Reset during the debounce and with invalid text), AC-Q6, AC-Q7, AC-Q8.
+- [x] 3.14 URL: AC-U1, AC-U2, AC-U3, AC-U4, AC-U5, AC-U6; AC-I2 (path stays under `mountPath`).
+- [x] 3.15 `contract.spec.ts`: AC-I3 (fixed property list on heading, header cell, body cell and Search input, standalone vs composed; Shell header and nav with and without the Remote).
 
 **Exit check:** `npm run build` and `npm test` in `prescription/` and `shell/`;
 `npx playwright test` in `e2e/` (all projects); ID check; audit.
