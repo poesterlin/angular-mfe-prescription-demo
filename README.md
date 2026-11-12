@@ -7,7 +7,7 @@ loads the Remote at runtime (Native Federation) and mounts it under `/prescripti
 Remote lets staff search, filter and page through prescriptions, with its state in the URL.
 The backend is an in-memory mock behind a swappable `PrescriptionApi`.
 
-<!-- Screenshot placeholder: add a screenshot of the Prescriptions view in the Shell. -->
+![The Prescriptions view in the Shell: filters, the table and paging](assets/prescriptions.png)
 
 ## Structure
 
