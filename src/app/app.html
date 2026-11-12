@@ -1,1 +1,8 @@
-<router-outlet />
+@boundary {
+  <router-outlet />
+} @error (let error = $error; let reset = $reset) {
+  <div role="alert">
+    <p>This page stopped working.</p>
+    <button type="button" (click)="reset()">Try again</button>
+  </div>
+}
