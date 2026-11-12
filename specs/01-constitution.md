@@ -57,7 +57,8 @@ Verified with `npm view` on 2026-11-12.
 | ID | Rule |
 | --- | --- |
 | C-K1 | Strict TypeScript. No `any`, no `@ts-ignore`. `[assumption]` |
-| C-K2 | Modern Angular only: standalone components, zoneless, signals, `OnPush`, `inject()`, `input()` / `output()`, built-in control flow (`@if`, `@for`). No NgModules. `[assumption]` |
+| C-K2 | Modern Angular only: standalone components, zoneless, `OnPush`, `inject()`, built-in control flow (`@if`, `@for`). No NgModules. `[assumption]` |
+| C-K2a | Signal syntax only. Component APIs use `input()`, `output()` and `model()`; queries use `viewChild()` / `contentChild()`; host bindings go in the `host` metadata. State is held in signals (`signal`, `computed`, `linkedSignal`) and async data in `resource` / `rxResource`; Observables become signals with `toSignal`. Not allowed: `@Input`, `@Output`, `@ViewChild`, `@HostBinding`, `@HostListener`, constructor injection, `BehaviorSubject` or other Subjects as state, `async` pipe, manual `subscribe` for view state. RxJS is allowed only for time-based operators (e.g. debounce) and as the `PrescriptionApi` return type. `[assumption]` |
 | C-K3 | Small, single-purpose files. Presentational components get data through inputs and report through outputs; they inject no services. `[assumption]` |
 | C-K4 | Each app's code passes `npm run build`, its tests and `npm run audit` (fallow), and the pre-commit hook is never bypassed. `[assumption]` |
 
