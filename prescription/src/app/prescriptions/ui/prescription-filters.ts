@@ -15,6 +15,9 @@ import { isInsurantId } from '../model/validation';
 
 export type FilterChange = Partial<FilterValues>;
 
+/** Search plus the filter fields; each keeps a draft that follows the URL. */
+type DraftField = 'q' | FilterField;
+
 const SEARCH_DEBOUNCE_MS = 300;
 
 /**
@@ -69,10 +72,10 @@ export class PrescriptionFilters {
   readonly searchChange = output<string>();
 
   /** Values this component sent out, so the URL echo does not overwrite a draft. */
-  private readonly sent: Partial<Record<FilterField, string>> = {};
+  private readonly sent: Partial<Record<DraftField, string>> = {};
   private readonly cancelSearch = new Subject<void>();
 
-  protected readonly search = linkedSignal(() => this.query().q);
+  protected readonly search = this.draft('q');
   protected readonly insurantId = this.draft('insurantId');
   protected readonly from = this.draft('from');
   protected readonly to = this.draft('to');
@@ -91,7 +94,10 @@ export class PrescriptionFilters {
   constructor() {
     this.debouncedSearch()
       .pipe(takeUntilDestroyed())
-      .subscribe((text) => this.searchChange.emit(text));
+      .subscribe((text) => {
+        this.sent.q = text;
+        this.searchChange.emit(text);
+      });
   }
 
   protected valueOf(event: Event): string {
@@ -116,6 +122,7 @@ export class PrescriptionFilters {
 
   protected clear(): void {
     this.cancelSearch.next();
+    delete this.sent.q;
     this.search.set('');
     this.insurantId.set('');
     this.from.set('');
@@ -123,7 +130,7 @@ export class PrescriptionFilters {
     this.reset.emit();
   }
 
-  private draft(field: FilterField): WritableSignal<string> {
+  private draft(field: DraftField): WritableSignal<string> {
     return linkedSignal<string, string>({
       source: () => this.query()[field],
       computation: (url, previous) => {
