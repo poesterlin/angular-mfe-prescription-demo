@@ -1,10 +1,10 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 /** Fallback page for a Remote that failed to load (AC-E1). */
 @Component({
   selector: 'shell-remote-unavailable',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `<p class="shell-alert" role="alert">{{ label() }} is currently unavailable</p>`,
+  template: `<p class="shell-alert" role="alert">This Component is currently unavailable</p>`,
   styles: `
     .shell-alert {
       margin: 0;
@@ -15,6 +15,4 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
   `,
 })
 export class RemoteUnavailable {
-  /** Bound from the route's `data.label`. */
-  readonly label = input.required<string>();
 }
