@@ -65,9 +65,9 @@ Verified with `npm view` on 2026-11-12.
 
 | ID | Rule |
 | --- | --- |
-| C-Q1 | Every requirement ID in the specification has at least one Playwright test, with the ID in the test title. `[assumption]` |
+| C-Q1 | Every requirement ID in the specification has at least one Playwright test, with the ID in the test title. Exception: failure-handling requirements that the running app gives no way to trigger may stay untested, because the brief does not require error handling. The specification marks them "untested (C-Q1 exception)". `[assumption]` |
 | C-Q2 | The e2e suite runs against two targets: the Remote in its Standalone Harness, and the Remote composed into the Shell. `[PDF]` isolation and integration, `[assumption]` mechanism |
-| C-Q3 | Vitest covers only what e2e cannot reach cheaply, such as the mock's paging edge cases, Remote Manifest parsing and the API error state. `[assumption]` |
+| C-Q3 | Vitest covers only what e2e cannot reach cheaply, such as the mock's paging edge cases and Remote Manifest parsing. It is optional and does not replace the Playwright test that C-Q1 requires. `[assumption]` |
 | C-Q4 | Tests rely on the mock's fixed seed, so counts and rows are deterministic. `[assumption]` |
 | C-Q5 | If a test and the specification disagree, work stops and the human decides. `[assumption]` |
 
