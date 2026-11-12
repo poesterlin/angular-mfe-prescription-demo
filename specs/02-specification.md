@@ -61,9 +61,9 @@ it gets back.
 | ID | Requirement | Source | Verified by |
 | --- | --- | --- | --- |
 | AC-Q1 | A "Search" field matches its text, case-insensitively and as a substring, against Medication name, Insurant name and Insurant ID. Input is debounced by 300 ms. | `[PDF]` search, `[assumption]` semantics | e2e |
-| AC-Q2 | An "Insurant ID" field filters to an exact, case-insensitive Insurant ID. A value that is not one letter followed by nine digits shows the field message "Enter one letter followed by nine digits" and is not applied. | `[PDF]` filter, `[assumption]` semantics | e2e |
+| AC-Q2 | An "Insurant ID" field filters to an exact, case-insensitive Insurant ID. A value that is not one letter followed by nine digits shows the field message "Enter one letter followed by nine digits" and is not applied; an Insurant ID Filter that was applied before is removed. | `[PDF]` filter, `[assumption]` semantics | e2e |
 | AC-Q3 | "Prescribed from" and "Prescribed to" date fields filter by Prescription Date, both bounds inclusive; either may be empty. | `[PDF]` filter, `[assumption]` semantics | e2e |
-| AC-Q4 | If "Prescribed to" is before "Prescribed from", the "to" field shows "Must not be before the from date" and the range is not applied. | `[assumption]` | e2e |
+| AC-Q4 | If "Prescribed to" is before "Prescribed from", the "to" field shows "Must not be before the from date" and the range is not applied; a range that was applied before is removed. | `[assumption]` | e2e |
 | AC-Q5 | A "Reset" button clears Search and all Filters and returns to page 1 with the default page size. | `[assumption]` | e2e |
 | AC-Q6 | Paging controls show the range ("1–20 of 1,000") and the position ("Page 1 of 50"), and offer First, Previous, Next and Last buttons. Buttons that cannot move are disabled. | `[PDF]` paging, `[assumption]` controls | e2e |
 | AC-Q7 | A "Rows per page" select offers 10, 20 and 50; the default is 20. | `[assumption]` | e2e |
