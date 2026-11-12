@@ -11,7 +11,8 @@
     "**/src/bootstrap.ts",            // bootstrapApplication, imported dynamically by main.ts
     "**/federation.config.{js,mjs,cjs}", // read by the native federation builder
     "**/src/app/**/*.routes.ts",      // modules a remote exposes ('./routes'); the shell loads them by name
-    "e2e/**/*.ts"                     // Playwright config, fixtures and suites
+    "e2e/**/*.ts",                    // Playwright config, fixtures and suites
+    "**/src/styles.css"               // global stylesheets, referenced only from angular.json
   ],
 
   // Generated output, not source.
@@ -21,10 +22,12 @@
     "**/test-results/**"
   ],
 
-  // Specifiers resolved at runtime by native federation, never by Node or the
-  // bundler here: the shell imports each remote by its name from remotes.json.
-  // List the remote names once the plan fixes them, e.g. "prescription/**".
+  // Empty on purpose: the Shell loads Remotes by URL from remotes.json, never by a
+  // bare import specifier, so there is nothing for the resolver to skip.
   "ignoreUnresolvedImports": [],
+
+  // Loaded by the native federation builder (polyfill and runtime), never imported.
+  "ignoreDependencies": ["es-module-shims", "@softarc/native-federation-orchestrator"],
 
   "duplicates": {
     // Hide pair-only clones; focus on widespread copy-paste

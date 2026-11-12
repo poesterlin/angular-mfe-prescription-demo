@@ -1,0 +1,10 @@
+.rx-harness-banner {
+  margin: 0;
+  padding: 0.5rem 1rem;
+  background: #fff4cc;
+  font: 600 0.875rem/1.4 system-ui, sans-serif;
+}
+
+.rx-harness-content {
+  padding: 1rem;
+}

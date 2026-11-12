@@ -1,0 +1,5 @@
+/* Harness page only. Nothing here may be inherited by the Remote's view (C-S2, AC-I3). */
+body {
+  margin: 0;
+  background: #f6f7f9;
+}

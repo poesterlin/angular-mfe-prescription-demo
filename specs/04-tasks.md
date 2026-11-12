@@ -22,17 +22,17 @@ It must print nothing.
 
 ## Phase 1: Repository, Remote and Standalone Harness
 
-- [ ] 1.1 Add `.nvmrc` (`26`). (C-T4)
-- [ ] 1.2 `git mv` `src/`, `public/`, `angular.json`, `tsconfig*.json` into `shell/`; move the Angular dependencies and scripts (`ng`, `start`, `build`, `watch`, `test`) from the root `package.json` into a new `shell/package.json`; regenerate both lockfiles. Root keeps `fallow`, `prettier`, `audit`. (C-A1)
-- [ ] 1.3 Rename the Angular project to `shell` in `shell/angular.json`; fix paths. `shell/` builds and its existing Vitest passes.
-- [ ] 1.4 `.gitignore`: unanchor `dist/`, `.angular/`, `out-tsc/`, `coverage/`; add `e2e/test-results/`, `e2e/playwright-report/`.
-- [ ] 1.5 Scaffold `prescription/` with `@angular/cli@22.2` (zoneless, CSS, no SSR, routing, no git, no AI config). Delete its `README.md`, `.vscode/`, `.editorconfig`; remove `@angular/forms`.
-- [ ] 1.6 `ng add @angular-architects/native-federation@22.2.5 --type remote --port 4201` in `prescription/`. Fix the range to `~22.2.5`; expose `'./routes'` instead of `'./Component'`; add `'tslib'` to `skip`. (C-T3, C-A7, AC-I1)
-- [ ] 1.7 `prescriptions/prescription.routes.ts`: default export `Routes` with one empty page component titled "Prescriptions". (C-A4)
-- [ ] 1.8 Harness: `app.routes.ts` with `sandbox/prescriptions` → lazy `prescription.routes`, `''` → redirect, `'**'` → "Not found" component; `app.html` with the "Standalone mode" banner; `styles.css` limited to `body` margin and background. (AC-H2, AC-H3, C-S2)
-- [ ] 1.9 `e2e/`: `package.json` with `@playwright/test` `1.64.0` exact and a `test` script; `playwright.config.ts` with both web servers and the `standalone`, `composed`, `contract` projects and their `testMatch`; `fixtures.ts` with the `mountPath` option.
-- [ ] 1.10 Tests: `harness.spec.ts` (AC-H1, AC-H2, AC-H3); `contract.spec.ts` AC-I1 (fetch `remoteEntry.json`: name `prescription`, exposes only `./routes`).
-- [ ] 1.11 `.fallowrc.json`: add `"**/src/styles.css"` to `entry`; `ignoreDependencies` for `es-module-shims` and `@softarc/native-federation-orchestrator`; drop `ignoreBinaries` if the audit stays clean.
+- [x] 1.1 Add `.nvmrc` (`26`). (C-T4)
+- [x] 1.2 `git mv` `src/`, `public/`, `angular.json`, `tsconfig*.json` into `shell/`; move the Angular dependencies and scripts (`ng`, `start`, `build`, `watch`, `test`) from the root `package.json` into a new `shell/package.json`; regenerate both lockfiles. Root keeps `fallow`, `prettier`, `audit`. (C-A1)
+- [x] 1.3 Rename the Angular project to `shell` in `shell/angular.json`; fix paths. `shell/` builds and its existing Vitest passes.
+- [x] 1.4 `.gitignore`: unanchor `dist/`, `.angular/`, `out-tsc/`, `coverage/`; add `e2e/test-results/`, `e2e/playwright-report/`.
+- [x] 1.5 Scaffold `prescription/` with `@angular/cli@22.2` (zoneless, CSS, no SSR, routing, no git, no AI config). Delete its `README.md`, `.vscode/`, `.editorconfig`; remove `@angular/forms`.
+- [x] 1.6 `ng add @angular-architects/native-federation@22.2.5 --type remote --port 4201` in `prescription/`. Fix the range to `~22.2.5`; expose `'./routes'` instead of `'./Component'`; add `'tslib'` to `skip`. (C-T3, C-A7, AC-I1)
+- [x] 1.7 `prescriptions/prescription.routes.ts`: default export `Routes` with one empty page component titled "Prescriptions". (C-A4)
+- [x] 1.8 Harness: `app.routes.ts` with `sandbox/prescriptions` → lazy `prescription.routes`, `''` → redirect, `'**'` → "Not found" component; `app.html` with the "Standalone mode" banner; `styles.css` limited to `body` margin and background. (AC-H2, AC-H3, C-S2)
+- [x] 1.9 `e2e/`: `package.json` with `@playwright/test` `1.64.0` exact and a `test` script; `playwright.config.ts` with both web servers and the `standalone`, `composed`, `contract` projects and their `testMatch`; `fixtures.ts` with the `mountPath` option.
+- [x] 1.10 Tests: `harness.spec.ts` (AC-H1, AC-H2, AC-H3); `contract.spec.ts` AC-I1 (fetch `remoteEntry.json`: name `prescription`, exposes only `./routes`).
+- [x] 1.11 `.fallowrc.json`: add `"**/src/styles.css"` to `entry`; `ignoreDependencies` for `es-module-shims` and `@softarc/native-federation-orchestrator`; drop `ignoreBinaries` if the audit stays clean.
 
 **Exit check:** `npm run build` in `shell/` and `prescription/`; `npm test` in `shell/`;
 `npx playwright test --project standalone --project contract -g "AC-H|AC-I1"` in `e2e/`; audit.

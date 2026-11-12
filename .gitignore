@@ -2,12 +2,12 @@ node_modules/
 .fallow/
 # See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
 # Compiled output
-/dist
-/tmp
-/out-tsc
-/bazel-out
+dist/
+tmp/
+out-tsc/
+bazel-out/
 # Node
-/node_modules
+node_modules/
 npm-debug.log
 yarn-error.log
 # IDEs and editors
@@ -27,10 +27,10 @@ yarn-error.log
 !.vscode/mcp.json
 .history/*
 # Miscellaneous
-/.angular/cache
+.angular/
 .sass-cache/
 /connect.lock
-/coverage
+coverage/
 /libpeerconnection.log
 testem.log
 /typings
@@ -38,3 +38,6 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+# Playwright
+e2e/test-results/
+e2e/playwright-report/
