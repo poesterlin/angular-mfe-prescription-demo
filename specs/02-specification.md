@@ -63,9 +63,9 @@ it gets back.
 | AC-Q1 | A "Search" field matches its text, case-insensitively and as a substring, against Medication name, Insurant name and Insurant ID. Input is debounced by 300 ms. | `[PDF]` search, `[assumption]` semantics | e2e |
 | AC-Q2 | An "Insurant ID" field filters to an exact, case-insensitive Insurant ID. A value that is not one letter followed by nine digits shows the field message "Enter one letter followed by nine digits" and is not applied; an Insurant ID Filter that was applied before is removed. | `[PDF]` filter, `[assumption]` semantics | e2e |
 | AC-Q3 | "Prescribed from" and "Prescribed to" date fields filter by Prescription Date, both bounds inclusive; either may be empty. | `[PDF]` filter, `[assumption]` semantics | e2e |
-| AC-Q4 | If "Prescribed to" is before "Prescribed from", the "to" field shows "Must not be before the from date" and the range is not applied; a range that was applied before is removed. | `[assumption]` | e2e |
+| AC-Q4 | If "Prescribed to" is before "Prescribed from", the "to" field shows "Must not be before the from date" and the "to" bound is not applied ("from" stays); a "to" that was applied before is removed. | `[assumption]` | e2e |
 | AC-Q5 | A "Reset" button clears Search and all Filters and returns to page 1 with the default page size. | `[assumption]` | e2e |
-| AC-Q6 | Paging controls show the range ("1–20 of 1,000") and the position ("Page 1 of 50"), and offer First, Previous, Next and Last buttons. Buttons that cannot move are disabled. | `[PDF]` paging, `[assumption]` controls | e2e |
+| AC-Q6 | Paging controls show the range ("1–20 of 1,000") and the position ("Page 1 of 50"), and offer First, Previous, Next and Last buttons. Buttons that cannot move are disabled. With no matches the paging controls are not shown (AC-F5). | `[PDF]` paging, `[assumption]` controls | e2e |
 | AC-Q7 | A "Rows per page" select offers 10, 20 and 50; the default is 20. | `[assumption]` | e2e |
 | AC-Q8 | Any change to Search, a Filter or the page size returns to page 1. | `[assumption]` | e2e |
 
@@ -77,7 +77,7 @@ it gets back.
 | AC-U2 | Opening or reloading a URL with these parameters restores Search, Filters, page and page size, both in the fields and in the table. | `[assumption]` | e2e, both targets |
 | AC-U3 | Typing in Search or a Filter replaces the current history entry. Changing page or page size and Reset each add one. | `[assumption]` | e2e |
 | AC-U4 | Back and Forward restore the previous state, and the form fields always show the values in the URL. | `[assumption]` | e2e |
-| AC-U5 | Invalid query values (non-numeric or non-positive `page`, a `pageSize` other than 10, 20 or 50, a malformed date or Insurant ID, `to` before `from`) are ignored and their defaults used. No error is shown for them. | `[assumption]` | e2e |
+| AC-U5 | Invalid query values (non-numeric or non-positive `page`, a `pageSize` other than 10, 20 or 50, a malformed date or Insurant ID, `to` before `from`, which drops `to`) are ignored and their defaults used. No error is shown for them. | `[assumption]` | e2e |
 | AC-U6 | A `page` beyond the last page shows the last page and corrects `page` in the URL, replacing the history entry. | `[assumption]` | e2e |
 
 ## 8. Failure handling

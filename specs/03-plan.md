@@ -59,20 +59,22 @@ Playwright 1.64.0, Node 26.5.1) on 2026-11-12.
 shell/
   public/remotes.json              Remote Manifest (served by the Shell, AC-M1)
   src/main.ts                      fetch + parse manifest → initFederation({}) → bootstrap
-  src/bootstrap.ts                 export bootstrap(remotes, loader): bootstrapApplication(App, appConfig(…))
+  src/bootstrap.ts                 export bootstrap(remotes, federation): bootstrapApplication(App, createAppConfig(…))
   src/app/remotes/
     remote-definition.ts           RemoteDefinition type + parseManifest(); no Angular imports
     remote-routes.ts               RemoteDefinition[] → Routes (loadChildren + fallback)
-    remote-unavailable.ts          fallback page component (AC-E1)
+    federation-loader.ts           initRemoteEntry + loadRemoteModule → Routes
+    remotes.token.ts               REMOTES injection token (feeds the navigation)
+    remote-unavailable.ts          generic fallback page, "This Component is currently unavailable" (AC-E1)
   src/app/welcome/welcome.ts       "Welcome" page (AC-S2)
   src/app/app.{ts,html,css}        layout: header, "Main navigation", @boundary + outlet (AC-E2, kept)
-  src/app/app.config.ts            providers; routes = Welcome + remote routes + '**' → ''
+  src/app/app.config.ts            createAppConfig(remotes, load); routes = Welcome + remote routes + '**' → ''
 ```
 
 **Startup.** `main.ts` must not import Angular: Angular is a shared singleton and only
 exists after `initFederation` resolves. It fetches `remotes.json`, runs
 `parseManifest` (skips and logs invalid entries; non-list or failed fetch → `[]`,
-AC-M2), calls `initFederation({})`, then `import('./bootstrap')` and hands it the
+AC-M2), calls `initFederation({}, { hostRemoteEntry: { url: './remoteEntry.json' } })`, then `import('./bootstrap')` and hands it the
 parsed list and the federation result.
 
 **Loading a Remote.** Remotes are registered lazily, on first navigation to their
@@ -104,7 +106,8 @@ manifest shipped in `public/remotes.json`:
 prescription/src/app/
   prescriptions/
     prescription.routes.ts         PUBLIC: default export Routes; route-level providers (C-A4, C-A6)
-    model/                         Prescription, PrescriptionQuery, PrescriptionPage, defaults. No Angular.
+    model/                         Prescription, PrescriptionQuery, PrescriptionPage, defaults, validation,
+                                   normalizeQuery (invalid → default). No Angular.
     data-access/
       prescription-api.ts          abstract class PrescriptionApi { search(q): Observable<PrescriptionPage> }
       mock-prescription-api.ts     in-memory implementation over the seeded data (AC-D4)
@@ -112,8 +115,10 @@ prescription/src/app/
       query-params.ts              URL ⇄ PrescriptionQuery, with validation and defaults (AC-U1, AC-U5)
     feature/
       prescription-page.ts         container: reads URL, calls API, writes URL, error + Retry (AC-E3)
+      page-correction.ts           pure: which page to put in the URL after a past-the-end answer (AC-U6)
     ui/
       prescription-filters.ts      Search, Insurant ID, from/to, Reset, field messages (AC-Q1–Q5)
+      filter-diff.ts               pure: which filter fields changed
       prescription-table.ts        table, result count, empty state (AC-F1–F5)
       prescription-paginator.ts    range, position, buttons, "Rows per page" (AC-Q6, AC-Q7)
   app.routes.ts                    harness: 'sandbox/prescriptions' → loadChildren(prescription.routes),
@@ -144,8 +149,10 @@ query signal → rxResource({ params: query, stream: api.search }) → page → 
 - `replaceUrl: true` for Search and Filter changes, a new entry for page, page size
   and Reset (AC-U3). Only non-default values go into the URL (AC-U1).
 - Page past the end (AC-U6): when the returned `page` differs from the requested one,
-  the container navigates with the returned page and `replaceUrl: true`. This logic
-  reads the page only when the resource has a value, never in the error state.
+  the container navigates with the returned page and `replaceUrl: true`. The resource
+  pairs every answer with the query it was loaded for, and `correctedPage` ignores an
+  answer for an older query (otherwise a stale answer would undo a click on "Next"),
+  and the error state.
 - API failure (AC-E3): the container shows the alert and a "Retry" button bound to the
   resource's `reload()`. Built, untested (C-Q1 exception).
 
@@ -162,6 +169,10 @@ therefore holds one **draft** per field:
 - **Invalid edit removes the filter**: editing an applied Insurant ID or date into an
   invalid value emits "no filter" for that field, so the URL never keeps a value the
   field no longer shows ("is not applied", AC-Q2, AC-Q4).
+- **URL echo**: when the component itself caused a URL change, the draft keeps what the
+  user typed instead of taking the URL's (normalised) value. Without this, an invalid
+  Insurant ID would be wiped from the field the moment its filter is removed.
+- **A "to" before "from"** drops only the "to" bound; "from" stays applied.
 - **Reset** clears every draft explicitly, cancels a pending Search debounce, then
   emits reset. This covers the cases where the URL value does not change (`''` to `''`)
   or a debounced value would land after Reset.
@@ -224,8 +235,9 @@ e2e/
                                      standalone  4201, mountPath /sandbox/prescriptions: tests/remote/**, tests/harness.spec.ts
                                      composed    4200, mountPath /prescriptions:         tests/remote/**, tests/shell/**
                                      contract    no baseURL:                             tests/contract.spec.ts
-  fixtures.ts                      `mountPath` option fixture; helpers for the table and URL
-  tests/remote/*.spec.ts           AC-F*, AC-Q*, AC-U*, AC-D*, AC-I2
+  fixtures.ts                      `mountPath` option fixture
+  tests/remote/view.ts             locators and helpers for the Remote specs
+  tests/remote/*.spec.ts           table-and-data, search-filter-paging, url-state: AC-F*, AC-Q*, AC-U*, AC-D*, AC-I2
   tests/shell/*.spec.ts            AC-S*, AC-M*, AC-E1
   tests/harness.spec.ts            AC-H*
   tests/contract.spec.ts           AC-I1 (fetch remoteEntry.json), AC-I3 (both apps in one test)
@@ -240,7 +252,8 @@ e2e/
 - Data tests avoid seed-specific magic numbers: they assert "1,000 results", that every
   visible row matches the Search or Filter, and that two loads show the same rows (AC-D3).
 - **Vitest is planned, not optional, for the branching logic**: `parseManifest`,
-  `query-params.ts` and the mock's search and paging. fallow's complexity gate (CRAP
+  `query-params.ts`, `normalizeQuery`, the mock's search and paging, and the pure helpers
+  `changedFilters` and `correctedPage` (plus the filters' draft handling). fallow's complexity gate (CRAP
   score, C-K4) fails untested functions of cyclomatic complexity ≥ 5, and these are the
   functions that reach it. They also make edge cases (AC-U5, AC-D4) cheaper to pin than
   through the browser. The Shell's existing `app.spec.ts` (covering the `@boundary`)
@@ -281,3 +294,21 @@ Each phase ends with its exit check passing, a commit, and a stop for review.
 | Remote load failure is cached by the router | "Unavailable" until reload; stated in the README |
 | CORS for a real deployment | The dev builder already sends `Access-Control-Allow-Origin: *`; a real host must allow the Shell origin on the Remote's static files |
 | `@boundary` is developer preview (AC-E2) | Stated in the README; untested by C-Q1 exception |
+
+## 9. Deviations from the original plan
+
+Recorded when the code was built:
+
+- The Shell's fallback for a failed Remote is generic ("This Component is currently
+  unavailable") and no longer uses the manifest label (owner's decision: simpler).
+  AC-E1, the tests and the Shell's `RemoteUnavailable` follow.
+- `withComponentInputBinding()` is not used in the Shell.
+- `normalizeQuery` (in `model/`) is the one place that turns invalid values into defaults,
+  used by both `parseQuery` and the mock (AC-U5, AC-D4).
+- The paging controls are hidden when nothing matches (AC-F5).
+- Two small pure helpers, `changedFilters` and `correctedPage`, were split out to keep
+  components under fallow's complexity gate.
+- Every Remote component sets `box-sizing` itself: the page's `:host *` rule does not
+  reach child components, and the Shell's reset would otherwise change them when composed
+  (found by AC-I3).
+- The Standalone Harness' root selector is `app-root`; the Shell's is `shell-root`.

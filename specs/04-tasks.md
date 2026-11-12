@@ -83,9 +83,9 @@ Tests (`tests/remote/`, both projects, unless noted)
 
 ## Phase 4: README and spec sync
 
-- [ ] 4.1 README: what it is, screenshot placeholder, quick start (`nvm use`, install and start per project, e2e command), structure and ownership, link to `docs/adr/`, link to the specification for assumptions, "How AI was used" with the facts listed and room for the owner's prose; note `@boundary` is developer preview and that a failed Remote load stays until reload. (C-D1, C-D2, C-D3)
-- [ ] 4.2 Sync `specs/01–04` and `GLOSSARY.md` with the code as built; record any deviation.
-- [ ] 4.3 Remove scratch files; `git status` clean apart from intended changes.
+- [~] 4.1 README: what it is, screenshot placeholder, quick start (`nvm use`, install and start per project, e2e command), structure and ownership, link to `docs/adr/`, link to the specification for assumptions, "How AI was used" with the facts listed and room for the owner's prose; note `@boundary` is developer preview and that a failed Remote load stays until reload. (C-D1, C-D2, C-D3)
+- [x] 4.2 Sync `specs/01–04` and `GLOSSARY.md` with the code as built; record any deviation.
+- [x] 4.3 Remove scratch files; `git status` clean apart from intended changes.
 
 **Exit check:** the owner reviews the README; every spec statement matches the code; full
 e2e suite, Vitest and audit still green.
