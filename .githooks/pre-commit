@@ -1,0 +1,31 @@
+#!/bin/sh
+# Generated from fallow hooks install --target git (https://fallow.tools), committed
+# so it is reviewable. Activate in a fresh clone with:
+#   git config core.hooksPath .githooks
+#
+# Gates commits on dead code, complexity, duplication, and styling. Audit defaults to
+# gate=new-only, so inherited findings on touched files do not block commits; only
+# findings introduced by the changeset fail the gate. Set audit.gate = "all" in
+# fallow.toml to fail on every finding in changed files.
+# Bypass on a single commit with: git commit --no-verify
+
+ROOT="$(git rev-parse --show-toplevel)"
+PATH="$ROOT/node_modules/.bin:$PATH"
+export PATH
+
+if ! command -v fallow >/dev/null 2>&1; then
+  echo "fallow: not installed (run 'npm install'), skipping audit" >&2
+  exit 0
+fi
+
+UPSTREAM="$(git rev-parse --abbrev-ref --symbolic-full-name '@{upstream}' 2>/dev/null || true)"
+if [ -n "$UPSTREAM" ]; then
+  # Diff against the merge-base with the upstream so feature branches forked off
+  # a non-default integration branch (next-release / hotfix / LTS) compare
+  # against the right base, not against their own remote tracking branch.
+  BASE="$(git merge-base "$UPSTREAM" HEAD 2>/dev/null || echo "$UPSTREAM")"
+else
+  BASE="main"
+fi
+
+fallow audit --base "$BASE" --quiet --gate-marker pre-commit

@@ -1,0 +1,11 @@
+{
+  "name": "angular-mfe-prescription-demo",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "audit": "fallow audit"
+  },
+  "devDependencies": {
+    "fallow": "^3.42.0"
+  }
+}
