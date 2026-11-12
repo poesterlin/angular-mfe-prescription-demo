@@ -1,3 +1,15 @@
-import { Routes } from '@angular/router';
+import type { Routes } from '@angular/router';
 
-export const routes: Routes = [];
+/** Welcome, then one route per Remote; unknown paths go back to Welcome (AC-S5). */
+export function buildRoutes(remoteRoutes: Routes): Routes {
+  return [
+    {
+      path: '',
+      pathMatch: 'full',
+      title: 'Welcome',
+      loadComponent: () => import('./welcome/welcome').then((m) => m.Welcome),
+    },
+    ...remoteRoutes,
+    { path: '**', redirectTo: '' },
+  ];
+}

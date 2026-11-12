@@ -39,15 +39,15 @@ It must print nothing.
 
 ## Phase 2: Shell
 
-- [ ] 2.1 `ng add @angular-architects/native-federation@22.2.5 --type host --port 4200` in `shell/`. Fix the range to `~22.2.5`; add `'tslib'` to `skip`. (C-T3, C-A7)
-- [ ] 2.2 `remotes/remote-definition.ts`: `RemoteDefinition` and `parseManifest` (skip and log invalid entries; non-list → `[]`). No Angular imports. Vitest spec. (AC-M1, AC-M2)
-- [ ] 2.3 `main.ts`: fetch `remotes.json` (failure → `[]`), parse, `initFederation({})`, `import('./bootstrap')`. `bootstrap.ts` exports `bootstrap(remotes, federation)`. (AC-M2)
-- [ ] 2.4 `remotes/remote-routes.ts` and `remote-unavailable.ts`: one lazy route per definition via `initRemoteEntry` + `loadRemoteModule`, `.then(m => m.default)`, fallback routes showing "<label> is currently unavailable". Vitest spec for the route building. (AC-S4, AC-E1)
-- [ ] 2.5 `public/remotes.json` with the `prescription` entry. (AC-S3)
-- [ ] 2.6 Layout in `app.html`/`app.css`: header with the app name, `nav` labelled "Main navigation" with "Home" and one link per definition; `@boundary` around the outlet kept. `shell-` classes. (AC-S1, AC-S3, AC-E2, C-S4)
-- [ ] 2.7 `welcome/welcome.ts` with heading "Welcome"; routes: `''` → Welcome, remote routes, `'**'` → `''`. (AC-S2, AC-S5)
-- [ ] 2.8 `styles.css`: minimal reset inside `@layer shell`. (C-S3)
-- [ ] 2.9 Tests in `tests/shell/`: AC-S1, AC-S2, AC-S3, AC-S4 (direct entry and reload), AC-S5, AC-M1, AC-M2 (invalid entry skipped; non-list and failed fetch → Welcome still works), AC-M3 (`page.route` serves a changed route path), AC-E1 (`page.route` aborts `remoteEntry.json`).
+- [x] 2.1 `ng add @angular-architects/native-federation@22.2.5 --type host --port 4200` in `shell/`. Fix the range to `~22.2.5`; add `'tslib'` to `skip`. (C-T3, C-A7)
+- [x] 2.2 `remotes/remote-definition.ts`: `RemoteDefinition` and `parseManifest` (skip and log invalid entries; non-list → `[]`). No Angular imports. Vitest spec. (AC-M1, AC-M2)
+- [x] 2.3 `main.ts`: fetch `remotes.json` (failure → `[]`), parse, `initFederation({})`, `import('./bootstrap')`. `bootstrap.ts` exports `bootstrap(remotes, federation)`. (AC-M2)
+- [x] 2.4 `remotes/remote-routes.ts` and `remote-unavailable.ts`: one lazy route per definition via `initRemoteEntry` + `loadRemoteModule`, `.then(m => m.default)`, fallback routes showing "<label> is currently unavailable". Vitest spec for the route building. (AC-S4, AC-E1)
+- [x] 2.5 `public/remotes.json` with the `prescription` entry. (AC-S3)
+- [x] 2.6 Layout in `app.html`/`app.css`: header with the app name, `nav` labelled "Main navigation" with "Home" and one link per definition; `@boundary` around the outlet kept. `shell-` classes. (AC-S1, AC-S3, AC-E2, C-S4)
+- [x] 2.7 `welcome/welcome.ts` with heading "Welcome"; routes: `''` → Welcome, remote routes, `'**'` → `''`. (AC-S2, AC-S5)
+- [x] 2.8 `styles.css`: minimal reset inside `@layer shell`. (C-S3)
+- [x] 2.9 Tests in `tests/shell/`: AC-S1, AC-S2, AC-S3, AC-S4 (direct entry and reload), AC-S5, AC-M1, AC-M2 (invalid entry skipped; non-list and failed fetch → Welcome still works), AC-M3 (`page.route` serves a changed route path), AC-E1 (`page.route` aborts `remoteEntry.json`).
 
 **Exit check:** `npm run build` and `npm test` in `shell/`;
 `npx playwright test --project composed -g "AC-S|AC-M|AC-E1"` in `e2e/`; audit.

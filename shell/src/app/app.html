@@ -1,8 +1,25 @@
-@boundary {
-  <router-outlet />
-} @error (let error = $error; let reset = $reset) {
-  <div role="alert">
-    <p>This page stopped working.</p>
-    <button type="button" (click)="reset()">Try again</button>
-  </div>
-}
+<header class="shell-header">
+  <span class="shell-title">Prescription Demo</span>
+  <nav aria-label="Main navigation">
+    <ul class="shell-nav">
+      <li>
+        <a routerLink="/" routerLinkActive="shell-active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+      </li>
+      @for (remote of remotes; track remote.name) {
+        <li>
+          <a [routerLink]="'/' + remote.routePath" routerLinkActive="shell-active">{{ remote.label }}</a>
+        </li>
+      }
+    </ul>
+  </nav>
+</header>
+<main class="shell-content">
+  @boundary {
+    <router-outlet />
+  } @error (let error = $error; let reset = $reset) {
+    <div role="alert">
+      <p>This page stopped working.</p>
+      <button type="button" (click)="reset()">Try again</button>
+    </div>
+  }
+</main>

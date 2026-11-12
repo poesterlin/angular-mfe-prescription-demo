@@ -1,0 +1,9 @@
+[
+  {
+    "name": "prescription",
+    "remoteEntry": "http://localhost:4201/remoteEntry.json",
+    "exposedModule": "./routes",
+    "routePath": "prescriptions",
+    "label": "Prescriptions"
+  }
+]
