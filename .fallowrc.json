@@ -1,23 +1,35 @@
 {
   // This file is JSONC: fallow reads these comments; generic JSON tools may not.
   "$schema": "./node_modules/fallow/schema.json",
+  // The pre-commit hook (.githooks/pre-commit) runs `fallow audit --base <merge-base>`,
+  // so only findings introduced by the change under review fail the commit.
+
+  // Runtime roots that nothing imports. fallow's Angular plugin covers
+  // angular.json, app.config and *.spec.ts; these are the federation and test
+  // files it cannot see.
   "entry": [
-    "src/index.{ts,js,jsx,mjs}",
-    "src/main.{ts,js,jsx,mjs}",
-    // Module-federation remotes boot from bootstrap.ts
-    "src/bootstrap.{ts,js,jsx,mjs}"
+    "**/src/bootstrap.ts",            // bootstrapApplication, imported dynamically by main.ts
+    "**/federation.config.{js,mjs,cjs}", // read by the native federation builder
+    "**/src/app/**/*.routes.ts",      // modules a remote exposes ('./routes'); the shell loads them by name
+    "e2e/**/*.ts"                     // Playwright config, fixtures and suites
   ],
+
+  // Generated output, not source.
+  "ignorePatterns": [
+    "**/.angular/**",
+    "**/playwright-report/**",
+    "**/test-results/**"
+  ],
+
+  // Specifiers resolved at runtime by native federation, never by Node or the
+  // bundler here: the shell imports each remote by its name from remotes.json.
+  // List the remote names once the plan fixes them, e.g. "prescription/**".
+  "ignoreUnresolvedImports": [],
+
   "duplicates": {
     // Hide pair-only clones; focus on widespread copy-paste
     // worth refactoring. Lower to 2 to report every duplicate pair.
     "minOccurrences": 3
-    // Common additions (uncomment to enable):
-    // "ignore": [
-    //   "**/lib/**",          // for repos that publish transpiled output to lib/
-    //   "**/legacy/**",       // for repos with legacy-build artifacts
-    //   "**/__generated__/**", // Relay, GraphQL Code Generator
-    //   "**/generated/**"     // OpenAPI, Protobuf codegen
-    // ]
   },
   "rules": {}
 }
